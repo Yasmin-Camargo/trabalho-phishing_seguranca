@@ -41,7 +41,3 @@ def send_email(to_name="USER", to_email="user@ufpel.edu.br",
         server.send_message(msg)
 
     print("HTML email sent successfully!")
-
-
-if __name__ == "__main__":
-    send_email()
