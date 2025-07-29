@@ -1,0 +1,5 @@
+📊  RESUMO:
+   Alunos procurados: 50
+   Alunos encontrados: 47
+   Alunos não encontrados: 3
+
