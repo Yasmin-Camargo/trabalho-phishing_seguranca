@@ -17,3 +17,8 @@ Trabalho desenvolvido para a disciplina de Segurança de computadores que tem o 
     Abra seu navegador e acesse: [http://localhost:8025](http://localhost:8025)
 
 Assim, você poderá visualizar os e-mails enviados durante os testes de phishing.
+
+
+
+Exemplo de email enviado:
+<img width="1920" height="929" alt="image" src="https://github.com/user-attachments/assets/3e9cbd20-5eff-4c23-82e6-c9c2cab5db75" />
