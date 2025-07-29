@@ -1,0 +1,16 @@
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inf.ufpel.edu.br;
+ i=@inf.ufpel.edu.br; q=dns/txt; s=default; t=1753749216; h=from : to :
+ subject : date; bh=TJdy6R/V+ghKbTZM+t7Fw/KFszqAfhtNr3ZckB3ze0I=;
+ b=ZuSflGllOAGjuQ+21oUfULYSqYtbHVcJphRTgt7cfLvgK0kHYpfu1MuceyUTiT2DffTu7
+ upfSppyiAM5NNsOQIY6I/RTzyNwv3XiRuRGTZFf4burMOwUyRiFMpCSQfoztv26GBFI3BGT
+ kMr84a9slB2/MOycqAQaQO/jngCL0CiUPeRtGWNOiU1mbrVmhreNIzhAoQRc0QFYEU2p3yh
+ 9yzTfilzBnxdAFLz+5mZnLiYSc/qlOyG8br5TWWq2bZvWMKImdfylwV5LQVKID+Sl7VK1a0
+ s9WHXJxT1YoLeEsSjEMA2Jn1LzX7MNlhC2YlxKmVUvV3JrduxtZ+Bi9W6rAA==
+From: lqsbezerra@inf.ufpel.edu.br
+To: maria.jdl@inf.ufpel.edu.br
+Subject: Teste DKIM
+Date: Tue, 29 Jul 2025 21:00:00 -0300
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+Olá, este é um teste de assinatura DKIM.

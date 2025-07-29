@@ -1,0 +1,8 @@
+From: lqsbezerra@inf.ufpel.edu.br
+To: maria.jdl@inf.ufpel.edu.br
+Subject: Teste DKIM
+Date: Tue, 29 Jul 2025 21:00:00 -0300
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+
+Olá, este é um teste de assinatura DKIM.

@@ -1,0 +1,26 @@
+$TTL 3600
+@       IN      SOA     ns1.inf.ufpel.edu.br. admin.inf.ufpel.edu.br. (
+                        2025072901 ; Serial (AAAA MMDDnn)
+                        3600       ; Refresh
+                        1800       ; Retry
+                        604800     ; Expire
+                        3600 )     ; Negative Cache TTL
+
+; Nameserver
+@       IN      NS      ns1.inf.ufpel.edu.br.
+
+; IP do domínio (pode ser localhost 127.0.0.1 para teste)
+@       IN      A       127.0.0.1
+ns1     IN      A       127.0.0.1
+
+; Registro SPF (TXT)
+@       IN      TXT     "v=spf1 ip4:127.0.0.1 -all"
+
+; Registro DKIM (chave pública) - altere a chave pública abaixo pela sua real
+default._domainkey  IN TXT (
+    "v=DKIM1; k=rsa; "
+    "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAv...SUA_CHAVE_PUBLICA_AQUI..."
+)
+
+; Registro DMARC - inicia em modo quarantine (testando)
+_dmarc  IN TXT     "v=DMARC1; p=quarantine; rua=mailto:dmarc-reports@inf.ufpel.edu.br"
