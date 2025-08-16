@@ -154,10 +154,14 @@ def gerar_emails_phishing():
                     continue
                 
                 email_template = random.choice(DATASET_EMAILS)
-                
+                rastreador = f"https://fluffy-gumdrop-ab8e4c.netlify.app/click?id={email}"
+
                 corpo_personalizado = email_template["corpo"].replace("{destinatario}", nome)
-                corpo_personalizado = corpo_personalizado.replace("{link}", "https://link.com.br")
-                
+                corpo_personalizado = corpo_personalizado.replace(
+                    "{link}",
+                    f'<a href="{rastreador}" target="_blank">Clique aqui</a>'
+                )        
+                        
                 corpo_html = get_cobalto_html_body(corpo_personalizado)
                 
                 email_json = {
