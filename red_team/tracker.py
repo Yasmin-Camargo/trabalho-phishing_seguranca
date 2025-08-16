@@ -66,9 +66,8 @@ ALERTA_HTML = '''
 </head>
 <body>
     <div class="container">
-        <h2>Achou que ia rodar?</h2>
         <img src="{{ url_for('static', filename='gato_rindo.png') }}" alt="Gato rindo">
-        <h1>ACHOU ERRADO OTÁRIO</h1>
+        <h1> CAIU NO PHISHING</h1>
         <p>Você clicou em um link de phishing simulado</p>
         <div class="descricao">
             <p><strong>O que é phishing:</strong> Phishing é um tipo de ataque cibernético em que criminosos tentam enganar usuários para que revelem informações confidenciais, como senhas, dados bancários ou números de cartão de crédito. Eles geralmente se passam por entidades legítimas, como bancos ou empresas, por meio de e-mails, mensagens ou sites falsos. O objetivo é roubar essas informações para fins fraudulentos.</p>
