@@ -1,13 +1,17 @@
 import sys
 import os
 
+# Adiciona a pasta principal do projeto
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'red-team')))
+# Adiciona a pasta red_team onde está o templates.py
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'red_team')))
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate, make_msgid
+
+# Agora o Python consegue encontrar templates.py
 from templates import get_default_plain_text, get_cobalto_html_body
 
 
