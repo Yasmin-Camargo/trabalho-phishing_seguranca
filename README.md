@@ -22,3 +22,18 @@ Assim, você poderá visualizar os e-mails enviados durante os testes de phishin
 
 Exemplo de email enviado:
 <img width="1920" height="929" alt="image" src="https://github.com/user-attachments/assets/3e9cbd20-5eff-4c23-82e6-c9c2cab5db75" />
+
+
+## Como testar a interface de alerta
+
+1. Inicie o servidor Flask:
+
+```bash
+python tracker.py
+```
+
+2. Clique no link de phishing no e-mail simulado.
+
+3. Você será redirecionado para a página de alerta
+
+4. Cada clique será registrado no arquivo cliques.csv.
