@@ -2,12 +2,13 @@ import sys
 import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'red-team')))
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate, make_msgid
-from red_team.templates import get_default_plain_text, get_cobalto_html_body
+from templates import get_default_plain_text, get_cobalto_html_body
 
 
 def build_email_message(to_name, to_email, subject, plain_text=None, html_body=None):

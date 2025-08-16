@@ -1,49 +1,100 @@
+import csv
+import json
+import os
+import sys
+from datetime import datetime
 from email_server.server import send_email
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'red_team'))
+import templates
+
+from flask import Flask, render_template, request, redirect, url_for
+
+# Arquivos de dados
+CONTATOS_CSV = "contatos.csv"
+LOG_ENVIO_CSV = f"log_envio_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+CLIQUE_CSV = "cliques.csv"
+
+# Inicializa Flask
+app = Flask(__name__, template_folder="red_team/templates", static_folder="red_team/static")
+
+# --- Função para enviar e-mails ---
+def gerar_e_enviar_emails():
+    resultados = []
+
+    with open(CONTATOS_CSV, newline='', encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        
+        for contato in reader:
+            nome = contato.get("nome")
+            email = contato.get("email")
+
+            phishing_data = templates.generate_phishing_email()
+            if not phishing_data:
+                print(f"Erro ao gerar e-mail para {nome} ({email})")
+                continue
+            
+            email_data = json.loads(phishing_data)
+
+            corpo_email = email_data['email'].replace("{name}", nome).replace("{email}", email)
+
+            # Envio do e-mail
+            send_email(
+                plain_text=corpo_email,
+                subject=email_data['subject'],
+                to_name=nome,
+                to_email=email
+            )
+
+            print(f"Enviado para {nome} ({email})")
+
+            resultados.append({
+                "nome": nome,
+                "email": email,
+                "assunto": email_data['subject'],
+                "remetente_falso": email_data['fake_sender_name'],
+                "email_falso": email_data['email'],
+                "corpo": corpo_email
+            })
+
+    with open(LOG_ENVIO_CSV, mode="w", newline='', encoding="utf-8") as f:
+        fieldnames = ["nome", "email", "assunto", "remetente_falso", "email_falso", "corpo"]
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(resultados)
+
+    print(f"Log salvo em: {LOG_ENVIO_CSV}")
+
+
+# --- Rotas Flask para tracker e alerta ---
+@app.route("/click")
+def click_link():
+    email = request.args.get("email", "desconhecido")
+    data_hora = datetime.now().isoformat()
+
+    if not os.path.exists(CLIQUE_CSV):
+        with open(CLIQUE_CSV, mode="w", newline='', encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=["email", "data_hora"])
+            writer.writeheader()
+
+    with open(CLIQUE_CSV, mode="a", newline='', encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["email", "data_hora"])
+        writer.writerow({"email": email, "data_hora": data_hora})
+
+    return render_template("alerta.html")
+
+@app.route("/9via")
+def visualizar_cliques():
+    cliques = []
+    if os.path.exists(CLIQUE_CSV):
+        with open(CLIQUE_CSV, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                cliques.append(row)
+    return render_template("cliques.html", cliques=cliques)
+
+
 if __name__ == "__main__":
-    plain_text = '''Olá, BIANCA BEPPLER DULLIUS
-        Escrevo com urgência sobre sua situação na disciplina de Algoritmos e Programação (22000294).
-        
-        Ao finalizar o lançamento das notas para o sistema Cobalto, identifiquei uma inconsistência nos seus envios de trabalhos. A sua frequência está em 76%, muito próxima do limite, e a média atual está em 6,8, o que te levaria para o exame final.
-        
-        O prazo final para digitação das notas é 02 de Setembro, e preciso resolver isso hoje para não te prejudicar. É possível que tenha ocorrido um erro no sistema de upload.
-        
-        Por favor, acesse o portal de revisão de notas através do link abaixo para verificar os envios que estão pendentes e confirmar sua nota semestral. Você tem até o final do dia para fazer a validação.
-        
-        Link para revisão: https://cobalto.ufpel.edu.br-portal-academico.net/validar-notas/22000294
-        
-        A falta de ação resultará na manutenção da nota atual e na necessidade de realizar o exame.
-        Atenciosamente,
+    gerar_e_enviar_emails()
 
-        Prof. Guilherme Tomaschewski Netto 
-        Disciplina de Algoritmos e Programação
-        Centro de Desenvolvimento Tecnológico (CDTec)
-        Universidade Federal de Pelotas'''
-
-    send_email(plain_text=plain_text, subject="Urgente: Revisão de Notas")
-from email_server.server import send_email
-
-if __name__ == "__main__":
-    destinatario_email = "bianca@example.com"  # ou pegue do seu contatos.csv
-    tracking_link = f"http://127.0.0.1:5000/click?id={destinatario_email}"
-
-    plain_text = f'''Olá, BIANCA BEPPLER DULLIUS
-Escrevo com urgência sobre sua situação na disciplina de Algoritmos e Programação (22000294).
-
-Ao finalizar o lançamento das notas para o sistema Cobalto, identifiquei uma inconsistência nos seus envios de trabalhos. A sua frequência está em 76%, muito próxima do limite, e a média atual está em 6,8, o que te levaria para o exame final.
-
-O prazo final para digitação das notas é 02 de Setembro, e preciso resolver isso hoje para não te prejudicar. É possível que tenha ocorrido um erro no sistema de upload.
-
-Por favor, acesse o portal de revisão de notas através do link abaixo para verificar os envios que estão pendentes e confirmar sua nota semestral. Você tem até o final do dia para fazer a validação.
-
-Link para revisão: {tracking_link}
-
-A falta de ação resultará na manutenção da nota atual e na necessidade de realizar o exame.
-Atenciosamente,
-
-Prof. Guilherme Tomaschewski Netto 
-Disciplina de Algoritmos e Programação
-Centro de Desenvolvimento Tecnológico (CDTec)
-Universidade Federal de Pelotas'''
-
-    send_email(plain_text=plain_text, subject="Urgente: Revisão de Notas")
+    app.run(host="0.0.0.0", port=5000, debug=True)
